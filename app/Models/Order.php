@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     use HasFactory;
+
+    const STATUS_NEW = 'new';
+    const STATUS_COMPLETED = 'completed';
     protected $fillable = [
         'customer_name',
         'status',

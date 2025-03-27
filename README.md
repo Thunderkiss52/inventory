@@ -1,5 +1,14 @@
-git clone <твой_репозиторий>
-cd inventory
+# Inventory
+
+Это тестовое приложение на Laravel для управления товарами и заказами.
+
+## Установка
+
+1. Склонируйте репозиторий:
+   ```bash
+   git clone https://github.com/thunderkiss52/inventory.git
+   cd inventory
+   ```
 
 composer install
 

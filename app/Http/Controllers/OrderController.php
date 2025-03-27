@@ -39,11 +39,16 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request)
     {
         try {
-            $validatedData = $request->validated();
-            $product = Product::find($validatedData['product_id']);
-            $validatedData['total_price'] = $product->price * $validatedData['quantity'];
-            $validatedData['status'] = 'new';
-            Order::create($validatedData);
+            $validated = $request->validated();
+
+            $product = Product::findorfail($validated['product_id']);
+            if (!$product) {
+                return redirect()->back()->with('error', 'Product not found');
+            }
+
+            $validated['total_price'] = $product->price * $validated['quantity'];
+            $validated['status'] = Order::STATUS_NEW;
+            Order::create($validated);
 
             return redirect()->route('orders.index')->with('success', 'Order created successfully');
         } catch (\Throwable $th) {
@@ -65,8 +70,8 @@ class OrderController extends Controller
 
     public function complete(Order $order)
     {
-        if ($order->status == 'new') {
-            $order->status = 'completed';
+        if ($order->status == Order::STATUS_NEW) {
+            $order->status = Order::STATUS_COMPLETED;
             $order->save();
             return redirect()->route('orders.show', $order)->with('success', 'Order status updated to completed.');
         }
